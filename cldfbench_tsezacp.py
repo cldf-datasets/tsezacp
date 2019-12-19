@@ -15,9 +15,6 @@ class Dataset(BaseDataset):
     dir = pathlib.Path(__file__).parent
     id = "tsezacp"
 
-    #def cldf_specs(self):  # A dataset must declare all CLDF sets it creates.
-    #    return super().cldf_specs()
-
     def cmd_download(self, args):
         pass
 
