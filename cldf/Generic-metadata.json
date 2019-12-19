@@ -7,6 +7,7 @@
     ],
     "dc:bibliographicCitation": "Abdulaev, A.K. & I. K. Abdullaev. 2010. Cezyas folklor/Dido (Tsez) folklore/Didojskij (cezskij) fol\u00b4klor. Leipzig\u2013Makhachkala: \u201cLotos\u201d.",
     "dc:conformsTo": "http://cldf.clld.org/v1.0/terms.rdf#Generic",
+    "dc:description": "The texts that constitute this corpus were collected by Arsen Kurbanovi\u010d Abdulaev and Isa Kurbanovi\u010d Abdullaev and published with Russian translation as Abdulaev and Abdullaev (2010). The intended audience of this book publication was primarily the Tsez-speaking community and Russian-speaking readers interested in folklore. Work on the book was sponsored by the [Max Planck Institute for Evolutionary Anthropology (MPI-EVA)](https://www.eva.mpg.de/) and part of the agreement was that the institute would be allowed to post on-line a version of the text suitable for scientific use by linguists, with morpheme glosses and an English translation added to the materials available in the book. The material is hereby provided for scientific research under the CC-BY license.",
     "dc:identifier": "https://tsezacp.clld.org",
     "dc:license": "https://creativecommons.org/licenses/by/4.0/",
     "dc:title": "The Tsez Annotated Corpus Project",
@@ -16,7 +17,7 @@
             "rdf:type": "prov:Entity",
             "dc:title": "Repository",
             "rdf:about": "https://github.com/cldf-datasets/tsezacp",
-            "dc:created": "ed1b0c2"
+            "dc:created": "1f66cfd"
         },
         {
             "rdf:type": "prov:Entity",
