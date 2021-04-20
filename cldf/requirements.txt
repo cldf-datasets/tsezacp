@@ -21,7 +21,7 @@ numpy==1.15.4
 openpyxl==2.6.4
 pluggy==0.6.0
 purl==1.5
-py==1.5.3
+py==1.10.0
 pybtex==0.22.2
 -e git+https://github.com/cldf/pycldf.git@04f5a2d9d3240f0b39973448df5033ca29ebebf5#egg=pycldf
 pyclts==2.0.0
