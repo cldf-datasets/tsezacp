@@ -1,0 +1,40 @@
+{
+    "title": "The Tsez Annotated Corpus Project",
+    "access_right": "open",
+    "keywords": [
+        "cldf:Dictionary",
+        "linguistics"
+    ],
+    "upload_type": "dataset",
+    "description": "<p>Cite the source of the dataset as:</p>\n\n<blockquote>\n<p>Abdulaev, A.K. &amp; I. K. Abdullaev. 2010. Cezyas folklor/Dido (Tsez) folklore/Didojskij (cezskij) fol\u00b4klor. Leipzig\u2013Makhachkala: \u201cLotos\u201d.</p>\n</blockquote>",
+    "license": {
+        "id": "CC-BY-4.0"
+    },
+    "creators": [
+        {
+            "name": "A.K. Abdulaev"
+        },
+        {
+            "name": "I.K. Abdullaev"
+        },
+        {
+            "name": "Andr\u00e9 M\u00fcller"
+        },
+        {
+            "name": "Evgeniya Zhivotova"
+        },
+        {
+            "name": "Bernard Comrie"
+        }
+    ],
+    "contributors": [
+        {
+            "name": "Bernard Comrie",
+            "type": "Editor"
+        },
+        {
+            "name": "Robert Forkel",
+            "type": "DataCurator"
+        }
+    ]
+}
