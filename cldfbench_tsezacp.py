@@ -132,6 +132,9 @@ class Dataset(BaseDataset):
             "Each entry in this table corresponds to one line in a text of this corpus."
         args.writer.cldf['EntryTable'].common_props['dc:description'] = \
             "This table represents a morpheme concordance for the corpus."
+        args.writer.cldf['SenseTable'].common_props['dc:description'] = \
+            "Morpheme senses are aggregated from the glosses used for a morpheme in the " \
+            "glossed texts."
         args.writer.cldf.add_columns(
             'EntryTable',
             {

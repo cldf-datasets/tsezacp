@@ -17,7 +17,7 @@
         {
             "rdf:about": "https://github.com/cldf-datasets/tsezacp",
             "rdf:type": "prov:Entity",
-            "dc:created": "a9a27f6",
+            "dc:created": "6b5cf11",
             "dc:title": "Repository"
         },
         {
@@ -113,6 +113,7 @@
         },
         {
             "dc:conformsTo": "http://cldf.clld.org/v1.0/terms.rdf#SenseTable",
+            "dc:description": "Morpheme senses are aggregated from the glosses used for a morpheme in the glossed texts.",
             "dc:extent": 2782,
             "tableSchema": {
                 "columns": [
