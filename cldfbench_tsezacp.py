@@ -204,8 +204,8 @@ class Dataset(BaseDataset):
         )):
             words_by_word[word[0]['to_Word_id']].append(word)
 
-        def joinm(morphemes, what):
-            res = ''.join(m[what] for m in morphemes)
+        def joinm(morphemes, what, sep=''):
+            res = sep.join(m[what] for m in morphemes)
             if res.endswith('-'):
                 res = res[:-1]
             return res
@@ -243,7 +243,7 @@ class Dataset(BaseDataset):
                     Primary_Text=line['Tsez_Line'],
                     Analyzed_Word=[gw.word_from_morphemes for gw in igt.glossed_words],
                     Gloss=[gw.gloss_from_morphemes for gw in igt.glossed_words],
-                    Part_of_Speech=[joinm(w, 'Part_of_Speech') for w in words],
+                    Part_of_Speech=[joinm(w, 'Part_of_Speech', sep='-') for w in words],
                     Translated_Text=line['English_Translation'],
                     Russian_Translation=line['Russian_Translation'],
                     Meta_Language_ID=EN,

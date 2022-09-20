@@ -7,5 +7,6 @@ I.K. Abdullaev |  | creator
 André Müller | | creator
 Evgeniya Zhivotova | | creator
 Bernard Comrie |  | creator, Editor
+Ilya Khait | | DataCurator
 Robert Forkel | @xrotwang | DataCurator
 

@@ -4,7 +4,7 @@ bs4==0.0.1
 certifi==2019.11.28
 chardet==5.0.0
 cldfbench==1.12.0
--e git+https://github.com/cldf-datasets/tsezacp@6b5cf117fea0eeac8cf21bbfc53eb180066c9dbc#egg=cldfbench_tsezacp
+-e git+https://github.com/cldf-datasets/tsezacp@24398473c03ffd6c491f4ad725a2e0749ad7b3b1#egg=cldfbench_tsezacp
 cldfcatalog==1.5.1
 cldfzenodo==0.2.0
 clldutils==3.12.0
