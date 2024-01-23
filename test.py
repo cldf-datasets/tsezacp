@@ -23,5 +23,9 @@ def test_iterwords():
     # should be "r-iti-run-tow ža qoq b-ˤaɣˤi-ł-n nex" not "r-iti-run-towžaqoqb-ˤaɣˤi-ł-nnex"
 
 
-def est_valid(cldf_dataset, cldf_logger):
+def test_valid(cldf_dataset, cldf_sqlite_database, cldf_logger):
     assert cldf_dataset.validate(log=cldf_logger)
+    assert cldf_dataset.texts[0].sentences[0].alternative_translations[0].cldf.metaLanguageReference == 'russ1263'
+    res = cldf_sqlite_database.query(
+        "select json_extract(cldf_position, '$[0]') as tid from exampletable where json_array_length(cldf_position) > 0 order by tid")
+    assert res[-1][0] == 78

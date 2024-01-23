@@ -11,6 +11,10 @@ EN = 'stan1293'
 RU = 'russ1263'
 
 
+def sort(*keys):
+    return lambda r: tuple(int(r[key]) for key in keys)
+
+
 def iterwords(allrows):
     innerhyphen = re.compile(r'([^-]+)-([^-]+)')
 
@@ -114,7 +118,7 @@ class Dataset(BaseDataset):
     def cldf_specs(self):
         return CLDFSpec(
             dir=self.cldf_dir,
-            module='Dictionary',
+            module='TextCorpus',
             data_fnames={
                 'EntryTable': 'morphemes.csv',
                 'ContributionTable': 'texts.csv',
@@ -125,48 +129,11 @@ class Dataset(BaseDataset):
     def cmd_download(self, args):
         pass
 
-    def cmd_makecldf(self, args):
-        args.writer.cldf['ContributionTable'].common_props['dc:description'] = \
-            "The texts of the Tsez annotated corpus are modeled as contributions."
-        args.writer.cldf['ExampleTable'].common_props['dc:description'] = \
-            "Each entry in this table corresponds to one line in a text of this corpus."
-        args.writer.cldf['EntryTable'].common_props['dc:description'] = \
-            "This table represents a morpheme concordance for the corpus."
-        args.writer.cldf['SenseTable'].common_props['dc:description'] = \
-            "Morpheme senses are aggregated from the glosses used for a morpheme in the " \
-            "glossed texts."
-        args.writer.cldf.add_columns(
-            'EntryTable',
-            {
-                'name': 'Example_IDs',
-                'separator': ' ',
-                'propertyUrl': 'http://cldf.clld.org/v1.0/terms.rdf#exampleReference'},
-        )
-        args.writer.cldf.add_component('LanguageTable')
-        args.writer.cldf.add_columns(
-            'ContributionTable',
-            {
-                'name': 'Source',
-                'separator': ';',
-                'propertyUrl': 'http://cldf.clld.org/v1.0/terms.rdf#source'},
-        )
-        args.writer.cldf.add_columns(
-            'ExampleTable',
-            {
-                "name": "Text_ID",
-                'propertyUrl': 'http://cldf.clld.org/v1.0/terms.rdf#contributionReference',
-            },
-            'Russian_Translation',
-            {
-                "name": "Part_of_Speech",
-                "required": False,
-                "datatype": "string",
-                "separator": "\t",
-            },
-        )
-        args.writer.cldf['ExampleTable', 'Gloss'].separator = '\t'
-        args.writer.cldf['ExampleTable', 'Analyzed_Word'].separator = '\t'
+    def dicts(self, what):
+        return self.raw_dir.read_csv('{}.csv'.format(what), dicts=True)
 
+    def cmd_makecldf(self, args):
+        self.schema(args.writer.cldf)
         args.writer.cldf.sources.add(
             """@book{Abdulaev2010,
     author = {Abdulaev, A.K. and I. K. Abdullaev},
@@ -179,7 +146,7 @@ class Dataset(BaseDataset):
         for name, id_ in [('Tsez', TSEZ), ('English', EN), ('Russian', RU)]:
             args.writer.objects['LanguageTable'].append(dict(ID=id_, Name=name, Glottocode=id_))
 
-        for text in self.raw_dir.read_csv('text.csv', dicts=True):
+        for text in self.dicts('text'):
             args.writer.objects['ContributionTable'].append(dict(
                 ID=text['Number'],
                 Name=text['Title_in_Tsez'],
@@ -187,21 +154,15 @@ class Dataset(BaseDataset):
                 Source=['Abdulaev2010'],
             ))
 
-        lines_by_id = collections.OrderedDict([
-            (l['id'], l) for l in self.raw_dir.read_csv('line.csv', dicts=True)])
-
+        lines_by_id = collections.OrderedDict([(l['id'], l) for l in self.dicts('line')])
         words_by_line = {
             lid: list(words) for lid, words in itertools.groupby(
-                sorted(
-                    self.raw_dir.read_csv('word.csv', dicts=True),
-                    key=lambda w: (int(w['to_Line_id']), int(w['Lex_Position']))),
+                sorted(self.dicts('word'), key=sort('to_Line_id', 'Lex_Position')),
                 lambda w: w['to_Line_id'])}
 
         words_by_word = collections.defaultdict(list)
         for word in iterwords(sorted(
-            self.raw_dir.read_csv('morpheme.csv', dicts=True),
-            key=lambda m: (int(m['to_Word_id']), int(m['Position'])),
-        )):
+                self.dicts('morpheme'), key=sort('to_Word_id', 'Position'))):
             words_by_word[word[0]['to_Word_id']].append(word)
 
         def joinm(morphemes, what, sep=''):
@@ -213,16 +174,14 @@ class Dataset(BaseDataset):
         entries = collections.defaultdict(set)
         entry2line = collections.defaultdict(list)
         for text_id, lines in itertools.groupby(
-            sorted(
-                lines_by_id.values(),
-                key=lambda l: (int(l['to_Text_id']), int(l['Line_Position']))),
+            sorted(lines_by_id.values(), key=sort('to_Text_id', 'Line_Position')),
             lambda l: l['to_Text_id']
         ):
             for line in lines:
                 wids = [w['id'] for w in words_by_line[line['id']]]
                 words = list(itertools.chain(*[words_by_word[wid] for wid in wids]))
 
-                lid = '{0}-{1}'.format(text_id, line['Line_Position'])
+                lid = '{}-en'.format(line['id'])
                 igt = IGT(
                     phrase=[joinm(w, 'Value') for w in words],
                     gloss=[joinm(w, 'Gloss') for w in words])
@@ -237,16 +196,25 @@ class Dataset(BaseDataset):
                             entry2line[gm.morpheme, pos].append(lid)
 
                 args.writer.objects['ExampleTable'].append(dict(
-                    ID='{0}-{1}'.format(text_id, line['Line_Position']),
+                    ID=lid,
                     Text_ID=text_id,
                     Language_ID=TSEZ,
+                    Position=[int(line['to_Text_id']), int(line['Line_Position'])],
                     Primary_Text=line['Tsez_Line'],
                     Analyzed_Word=[gw.word_from_morphemes for gw in igt.glossed_words],
                     Gloss=[gw.gloss_from_morphemes for gw in igt.glossed_words],
                     Part_of_Speech=[joinm(w, 'Part_of_Speech', sep='-') for w in words],
                     Translated_Text=line['English_Translation'],
-                    Russian_Translation=line['Russian_Translation'],
+                    LGR_Conformance=igt.conformance.name if igt.conformance else None,
                     Meta_Language_ID=EN,
+                ))
+                args.writer.objects['ExampleTable'].append(dict(
+                    ID=lid.replace('en', 'ru'),
+                    Main_Example_ID=lid,
+                    Language_ID=TSEZ,
+                    Primary_Text=line['Tsez_Line'],
+                    Translated_Text=line['Russian_Translation'],
+                    Meta_Language_ID=RU,
                 ))
 
         for i, (entry, senses) in enumerate(sorted(entries.items()), start=1):
@@ -263,3 +231,59 @@ class Dataset(BaseDataset):
                     Description=sense,
                     Entry_ID=str(i),
                 ))
+
+    def schema(self, cldf):
+        cldf.add_component('LanguageTable')
+
+        # Texts:
+        cldf.add_columns(
+            'ContributionTable',
+            {
+                'name': 'Source',
+                'separator': ';',
+                'propertyUrl': 'http://cldf.clld.org/v1.0/terms.rdf#source'},
+        )
+        # Lines of text:
+        cldf['ExampleTable'].common_props['dc:description'] = \
+            ("Rows in this table correspond to lines in texts of the corpus. Since the texts are "
+             "translated to English and Russian, each line corresponds to two rows. The one with "
+             "meta-language English contains the full IGT, while the one with meta-language "
+             "Russian links to the full IGT via Main_Example_ID.")
+        cldf.add_columns(
+            'ExampleTable',
+            {
+                "name": "Text_ID",
+                'propertyUrl': 'http://cldf.clld.org/v1.0/terms.rdf#contributionReference',
+            },
+            {
+                "name": "Main_Example_ID",
+                'propertyUrl': 'http://cldf.clld.org/v1.0/terms.rdf#exampleReference',
+                "dc:description": "ID of the associated full IGT or null - for full IGT lines."
+            },
+            {
+                "name": "Position",
+                'propertyUrl': 'http://cldf.clld.org/v1.0/terms.rdf#position',
+                "datatype": "integer",
+                "separator": " ",
+                "dc:description": "Two-level position of a line in the corpus.",
+            },
+            {
+                "name": "Part_of_Speech",
+                "required": False,
+                "datatype": "string",
+                "separator": "\t",
+            },
+        )
+        cldf.add_component('SenseTable')
+        cldf['SenseTable'].common_props['dc:description'] = \
+            "Morpheme senses are aggregated from the glosses used for a morpheme in the " \
+            "glossed texts."
+        cldf['EntryTable'].common_props['dc:description'] = \
+            "This table represents a morpheme concordance for the corpus."
+        cldf.add_columns(
+            'EntryTable',
+            {
+                'name': 'Example_IDs',
+                'separator': ' ',
+                'propertyUrl': 'http://cldf.clld.org/v1.0/terms.rdf#exampleReference'},
+        )

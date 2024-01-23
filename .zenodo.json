@@ -3,6 +3,7 @@
     "access_right": "open",
     "keywords": [
         "cldf:Dictionary",
+        "cldf:TextCorpus",
         "linguistics"
     ],
     "upload_type": "dataset",

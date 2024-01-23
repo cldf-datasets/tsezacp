@@ -21,4 +21,4 @@ Available online at https://tsezacp.clld.org
 
 The following CLDF datasets are available in [cldf](cldf):
 
-- CLDF [Dictionary](https://github.com/cldf/cldf/tree/master/modules/Dictionary) at [cldf/Dictionary-metadata.json](cldf/Dictionary-metadata.json)
+- CLDF [TextCorpus](https://github.com/cldf/cldf/tree/master/modules/TextCorpus) at [cldf/TextCorpus-metadata.json](cldf/TextCorpus-metadata.json)

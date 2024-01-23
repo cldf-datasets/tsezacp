@@ -1,8 +1,8 @@
-<a name="ds-dictionarymetadatajson"> </a>
+<a name="ds-textcorpusmetadatajson"> </a>
 
-# Dictionary The Tsez Annotated Corpus Project
+# TextCorpus The Tsez Annotated Corpus Project
 
-**CLDF Metadata**: [Dictionary-metadata.json](./Dictionary-metadata.json)
+**CLDF Metadata**: [TextCorpus-metadata.json](./TextCorpus-metadata.json)
 
 **Sources**: [sources.bib](./sources.bib)
 
@@ -11,15 +11,43 @@ The texts that constitute this corpus were collected by Arsen Kurbanovič Abdula
 property | value
  --- | ---
 [dc:bibliographicCitation](http://purl.org/dc/terms/bibliographicCitation) | Abdulaev, A.K. & I. K. Abdullaev. 2010. Cezyas folklor/Dido (Tsez) folklore/Didojskij (cezskij) fol´klor. Leipzig–Makhachkala: “Lotos”.
-[dc:conformsTo](http://purl.org/dc/terms/conformsTo) | [CLDF Dictionary](http://cldf.clld.org/v1.0/terms.rdf#Dictionary)
+[dc:conformsTo](http://purl.org/dc/terms/conformsTo) | [CLDF TextCorpus](http://cldf.clld.org/v1.0/terms.rdf#TextCorpus)
 [dc:identifier](http://purl.org/dc/terms/identifier) | https://tsezacp.clld.org
 [dc:license](http://purl.org/dc/terms/license) | https://creativecommons.org/licenses/by/4.0/
 [dcat:accessURL](http://www.w3.org/ns/dcat#accessURL) | https://github.com/cldf-datasets/tsezacp
-[prov:wasDerivedFrom](http://www.w3.org/ns/prov#wasDerivedFrom) | <ol><li><a href="https://github.com/cldf-datasets/tsezacp/tree/2439847">cldf-datasets/tsezacp 2439847</a></li><li><a href="https://github.com/glottolog/glottolog/tree/v4.6">Glottolog v4.6</a></li></ol>
-[prov:wasGeneratedBy](http://www.w3.org/ns/prov#wasGeneratedBy) | <ol><li><strong>python</strong>: 3.8.10</li><li><strong>python-packages</strong>: <a href="./requirements.txt">requirements.txt</a></li></ol>
+[prov:wasDerivedFrom](http://www.w3.org/ns/prov#wasDerivedFrom) | <ol><li><a href="https://github.com/cldf-datasets/tsezacp/tree/v1.0">cldf-datasets/tsezacp v1.0</a></li><li><a href="https://github.com/glottolog/glottolog/tree/v4.8">Glottolog v4.8</a></li></ol>
+[prov:wasGeneratedBy](http://www.w3.org/ns/prov#wasGeneratedBy) | <ol><li><strong>python</strong>: 3.10.12</li><li><strong>python-packages</strong>: <a href="./requirements.txt">requirements.txt</a></li></ol>
 [rdf:ID](http://www.w3.org/1999/02/22-rdf-syntax-ns#ID) | tsezacp
 [rdf:type](http://www.w3.org/1999/02/22-rdf-syntax-ns#type) | http://www.w3.org/ns/dcat#Distribution
 
+
+## <a name="table-linescsv"></a>Table [lines.csv](./lines.csv)
+
+Rows in this table correspond to lines in texts of the corpus. Since the texts are translated to English and Russian, each line corresponds to two rows. The one with meta-language English contains the full IGT, while the one with meta-language Russian links to the full IGT via Main_Example_ID.
+
+property | value
+ --- | ---
+[dc:conformsTo](http://purl.org/dc/terms/conformsTo) | [CLDF ExampleTable](http://cldf.clld.org/v1.0/terms.rdf#ExampleTable)
+[dc:extent](http://purl.org/dc/terms/extent) | 9898
+
+
+### Columns
+
+Name/Property | Datatype | Description
+ --- | --- | --- 
+[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string`<br>Regex: `[a-zA-Z0-9_\-]+` | Primary key
+[Language_ID](http://cldf.clld.org/v1.0/terms.rdf#languageReference) | `string` | References [languages.csv::ID](#table-languagescsv)
+[Primary_Text](http://cldf.clld.org/v1.0/terms.rdf#primaryText) | `string` | The example text in the source language.
+[Analyzed_Word](http://cldf.clld.org/v1.0/terms.rdf#analyzedWord) | list of `string` (separated by `	`) | The sequence of words of the primary text to be aligned with glosses
+[Gloss](http://cldf.clld.org/v1.0/terms.rdf#gloss) | list of `string` (separated by `	`) | The sequence of glosses aligned with the words of the primary text
+[Translated_Text](http://cldf.clld.org/v1.0/terms.rdf#translatedText) | `string` | The translation of the example text in a meta language
+[Meta_Language_ID](http://cldf.clld.org/v1.0/terms.rdf#metaLanguageReference) | `string` | References the language of the translated text<br>References [languages.csv::ID](#table-languagescsv)
+[LGR_Conformance](http://cldf.clld.org/v1.0/terms.rdf#lgrConformance) | `string`<br>Valid choices:<br> `WORD_ALIGNED` `MORPHEME_ALIGNED` | The level of conformance of the example with the Leipzig Glossing Rules
+[Comment](http://cldf.clld.org/v1.0/terms.rdf#comment) | `string` | 
+[Text_ID](http://cldf.clld.org/v1.0/terms.rdf#contributionReference) | `string` | References [texts.csv::ID](#table-textscsv)
+[Main_Example_ID](http://cldf.clld.org/v1.0/terms.rdf#exampleReference) | `string` | ID of the associated full IGT or null - for full IGT lines.<br>References [lines.csv::ID](#table-linescsv)
+[Position](http://cldf.clld.org/v1.0/terms.rdf#position) | list of `integer` (separated by ` `) | Two-level position of a line in the corpus.
+`Part_of_Speech` | list of `string` (separated by `	`) | 
 
 ## <a name="table-morphemescsv"></a>Table [morphemes.csv](./morphemes.csv)
 
@@ -35,11 +63,50 @@ property | value
 
 Name/Property | Datatype | Description
  --- | --- | --- 
-[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string` | Primary key
+[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string`<br>Regex: `[a-zA-Z0-9_\-]+` | Primary key
 [Language_ID](http://cldf.clld.org/v1.0/terms.rdf#languageReference) | `string` | References [languages.csv::ID](#table-languagescsv)
 [Headword](http://cldf.clld.org/v1.0/terms.rdf#headword) | `string` | 
 [Part_Of_Speech](http://cldf.clld.org/v1.0/terms.rdf#partOfSpeech) | `string` | 
 [Example_IDs](http://cldf.clld.org/v1.0/terms.rdf#exampleReference) | list of `string` (separated by ` `) | References [lines.csv::ID](#table-linescsv)
+
+## <a name="table-textscsv"></a>Table [texts.csv](./texts.csv)
+
+property | value
+ --- | ---
+[dc:conformsTo](http://purl.org/dc/terms/conformsTo) | [CLDF ContributionTable](http://cldf.clld.org/v1.0/terms.rdf#ContributionTable)
+[dc:extent](http://purl.org/dc/terms/extent) | 78
+
+
+### Columns
+
+Name/Property | Datatype | Description
+ --- | --- | --- 
+[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string`<br>Regex: `[a-zA-Z0-9_\-]+` | Primary key
+[Name](http://cldf.clld.org/v1.0/terms.rdf#name) | `string` | 
+[Description](http://cldf.clld.org/v1.0/terms.rdf#description) | `string` | 
+[Contributor](http://cldf.clld.org/v1.0/terms.rdf#contributor) | `string` | 
+[Citation](http://cldf.clld.org/v1.0/terms.rdf#citation) | `string` | 
+[Source](http://cldf.clld.org/v1.0/terms.rdf#source) | list of `string` (separated by `;`) | References [sources.bib::BibTeX-key](./sources.bib)
+
+## <a name="table-languagescsv"></a>Table [languages.csv](./languages.csv)
+
+property | value
+ --- | ---
+[dc:conformsTo](http://purl.org/dc/terms/conformsTo) | [CLDF LanguageTable](http://cldf.clld.org/v1.0/terms.rdf#LanguageTable)
+[dc:extent](http://purl.org/dc/terms/extent) | 3
+
+
+### Columns
+
+Name/Property | Datatype | Description
+ --- | --- | --- 
+[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string`<br>Regex: `[a-zA-Z0-9_\-]+` | Primary key
+[Name](http://cldf.clld.org/v1.0/terms.rdf#name) | `string` | 
+[Macroarea](http://cldf.clld.org/v1.0/terms.rdf#macroarea) | `string` | 
+[Latitude](http://cldf.clld.org/v1.0/terms.rdf#latitude) | `decimal`<br>&ge; -90<br>&le; 90 | 
+[Longitude](http://cldf.clld.org/v1.0/terms.rdf#longitude) | `decimal`<br>&ge; -180<br>&le; 180 | 
+[Glottocode](http://cldf.clld.org/v1.0/terms.rdf#glottocode) | `string`<br>Regex: `[a-z0-9]{4}[1-9][0-9]{3}` | 
+[ISO639P3code](http://cldf.clld.org/v1.0/terms.rdf#iso639P3code) | `string`<br>Regex: `[a-z]{3}` | 
 
 ## <a name="table-sensescsv"></a>Table [senses.csv](./senses.csv)
 
@@ -55,74 +122,7 @@ property | value
 
 Name/Property | Datatype | Description
  --- | --- | --- 
-[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string` | Primary key
+[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string`<br>Regex: `[a-zA-Z0-9_\-]+` | Primary key
 [Description](http://cldf.clld.org/v1.0/terms.rdf#description) | `string` | 
-[Entry_ID](http://cldf.clld.org/v1.0/terms.rdf#entryReference) | `string` | References [entries.csv::ID](#table-entriescsv)
-
-## <a name="table-textscsv"></a>Table [texts.csv](./texts.csv)
-
-The texts of the Tsez annotated corpus are modeled as contributions.
-
-property | value
- --- | ---
-[dc:conformsTo](http://purl.org/dc/terms/conformsTo) | [CLDF ContributionTable](http://cldf.clld.org/v1.0/terms.rdf#ContributionTable)
-[dc:extent](http://purl.org/dc/terms/extent) | 78
-
-
-### Columns
-
-Name/Property | Datatype | Description
- --- | --- | --- 
-[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string` | Primary key
-[Name](http://cldf.clld.org/v1.0/terms.rdf#name) | `string` | 
-[Description](http://cldf.clld.org/v1.0/terms.rdf#description) | `string` | 
-[Contributor](http://cldf.clld.org/v1.0/terms.rdf#contributor) | `string` | 
-[Citation](http://cldf.clld.org/v1.0/terms.rdf#citation) | `string` | 
-[Source](http://cldf.clld.org/v1.0/terms.rdf#source) | list of `string` (separated by `;`) | References [sources.bib::BibTeX-key](./sources.bib)
-
-## <a name="table-linescsv"></a>Table [lines.csv](./lines.csv)
-
-Each entry in this table corresponds to one line in a text of this corpus.
-
-property | value
- --- | ---
-[dc:conformsTo](http://purl.org/dc/terms/conformsTo) | [CLDF ExampleTable](http://cldf.clld.org/v1.0/terms.rdf#ExampleTable)
-[dc:extent](http://purl.org/dc/terms/extent) | 4949
-
-
-### Columns
-
-Name/Property | Datatype | Description
- --- | --- | --- 
-[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string` | Primary key
-[Language_ID](http://cldf.clld.org/v1.0/terms.rdf#languageReference) | `string` | References [languages.csv::ID](#table-languagescsv)
-[Primary_Text](http://cldf.clld.org/v1.0/terms.rdf#primaryText) | `string` | The example text in the source language.
-[Analyzed_Word](http://cldf.clld.org/v1.0/terms.rdf#analyzedWord) | list of `string` (separated by `	`) | The sequence of words of the primary text to be aligned with glosses
-[Gloss](http://cldf.clld.org/v1.0/terms.rdf#gloss) | list of `string` (separated by `	`) | The sequence of glosses aligned with the words of the primary text
-[Translated_Text](http://cldf.clld.org/v1.0/terms.rdf#translatedText) | `string` | The translation of the example text in a meta language
-[Meta_Language_ID](http://cldf.clld.org/v1.0/terms.rdf#metaLanguageReference) | `string` | References the language of the translated text<br>References [languages.csv::ID](#table-languagescsv)
-[Comment](http://cldf.clld.org/v1.0/terms.rdf#comment) | `string` | 
-[Text_ID](http://cldf.clld.org/v1.0/terms.rdf#contributionReference) | `string` | References [texts.csv::ID](#table-textscsv)
-`Russian_Translation` | `string` | 
-`Part_of_Speech` | list of `string` (separated by `	`) | 
-
-## <a name="table-languagescsv"></a>Table [languages.csv](./languages.csv)
-
-property | value
- --- | ---
-[dc:conformsTo](http://purl.org/dc/terms/conformsTo) | [CLDF LanguageTable](http://cldf.clld.org/v1.0/terms.rdf#LanguageTable)
-[dc:extent](http://purl.org/dc/terms/extent) | 3
-
-
-### Columns
-
-Name/Property | Datatype | Description
- --- | --- | --- 
-[ID](http://cldf.clld.org/v1.0/terms.rdf#id) | `string` | Primary key
-[Name](http://cldf.clld.org/v1.0/terms.rdf#name) | `string` | 
-[Macroarea](http://cldf.clld.org/v1.0/terms.rdf#macroarea) | `string` | 
-[Latitude](http://cldf.clld.org/v1.0/terms.rdf#latitude) | `decimal` | 
-[Longitude](http://cldf.clld.org/v1.0/terms.rdf#longitude) | `decimal` | 
-[Glottocode](http://cldf.clld.org/v1.0/terms.rdf#glottocode) | `string` | 
-[ISO639P3code](http://cldf.clld.org/v1.0/terms.rdf#iso639P3code) | `string` | 
+[Entry_ID](http://cldf.clld.org/v1.0/terms.rdf#entryReference) | `string` | References [morphemes.csv::ID](#table-morphemescsv)
 
