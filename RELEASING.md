@@ -1,8 +1,14 @@
 # Releasing the Tsez Annotated Corpus
 
+0. CLone repos and install dependencies:
+   ```shell
+   git clone https://github.com/cldf-datasets/tsezacp tsezacp-cldf
+   cd tsezacp-cldf
+   pip install -e .[test]
+   ```
 1. Re-create the CLDF:
    ```shell
-   cldfbench makecldf cldfbench_tsezacp.py --glottolog-version v4.8 --with-zenodo --with-cldfreadme
+   cldfbench makecldf cldfbench_tsezacp.py --glottolog-version v5.3 --with-zenodo --with-cldfreadme
    ```
 2. Validate the CLDF:
    ```shell
